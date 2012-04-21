@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_filter :get_post, :only => [:show, :edit, :update, :destroy]
   # GET /posts
   # GET /posts.json
   def index
@@ -13,7 +14,7 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
-    @post = Post.find(params[:id])
+    @comment = Comment.new
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,7 +35,6 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
-    @post = Post.find(params[:id])
   end
 
   # POST /posts
@@ -56,8 +56,6 @@ class PostsController < ApplicationController
   # PUT /posts/1
   # PUT /posts/1.json
   def update
-    @post = Post.find(params[:id])
-
     respond_to do |format|
       if @post.update_attributes(params[:post])
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
@@ -72,12 +70,15 @@ class PostsController < ApplicationController
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
-    @post = Post.find(params[:id])
     @post.destroy
 
     respond_to do |format|
       format.html { redirect_to posts_url }
       format.json { head :no_content }
     end
+  end
+
+  def get_post
+    @post = Post.find(params[:id])
   end
 end
